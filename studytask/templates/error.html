@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block title %}页面未找到{% endblock %}
+{% block content %}
+<section class="panel confirm-panel"><p class="error-code">404</p><h1>没有找到这个页面</h1><p>任务可能已被删除，或者访问地址不正确。</p><a class="button button-primary" href="{{ url_for('tasks.index') }}">返回任务总览</a></section>
+{% endblock %}

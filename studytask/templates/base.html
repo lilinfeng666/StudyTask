@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}StudyTask{% endblock %} · 个人学习任务管理</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="site-header">
+    <div class="container header-inner">
+        <a class="brand" href="{{ url_for('tasks.index') }}" aria-label="StudyTask首页">
+            <span class="brand-mark">ST</span>
+            <span class="brand-copy"><strong>StudyTask</strong><small>个人学习任务管理</small></span>
+        </a>
+        <a class="button button-primary" href="{{ url_for('tasks.create') }}"><span aria-hidden="true">＋</span> 新建任务</a>
+    </div>
+</header>
+<main class="container main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-stack" aria-live="polite">
+                {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</main>
+<footer class="site-footer">专注学习，有序推进每一项任务。</footer>
+</body>
+</html>

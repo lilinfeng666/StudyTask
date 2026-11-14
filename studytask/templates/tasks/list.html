@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}任务总览{% endblock %}
+{% block content %}
+<section class="hero">
+    <div>
+        <p class="eyebrow">MY STUDY PLAN</p>
+        <h1>任务总览</h1>
+        <p>清晰安排课程作业、实验与考试准备，优先完成重要的事。</p>
+    </div>
+    <span class="hero-note">今日也要稳步前进</span>
+</section>
+
+<section class="stats-grid" aria-label="任务统计">
+    <article class="stat-card"><span class="stat-label">全部任务</span><strong>{{ stats.total }}</strong><small>持续记录每一项学习目标</small></article>
+    <article class="stat-card stat-accent"><span class="stat-label">已完成</span><strong>{{ stats.completed }}</strong><small>每一次完成都值得记录</small></article>
+    <article class="stat-card"><span class="stat-label">完成率</span><strong>{{ stats.completion_rate }}<span class="rate-unit">%</span></strong><small>按全部任务实时计算</small></article>
+</section>
+
+<section class="panel filter-panel">
+    <div class="section-heading"><div><p class="eyebrow">FILTER</p><h2>筛选任务</h2></div><a href="{{ url_for('tasks.index') }}">重置条件</a></div>
+    <form class="filter-form" method="get" action="{{ url_for('tasks.index') }}">
+        <label>所属课程
+            <select name="course">
+                <option value="">全部课程</option>
+                {% for course in courses %}<option value="{{ course }}" {% if filters.course == course %}selected{% endif %}>{{ course }}</option>{% endfor %}
+            </select>
+        </label>
+        <label>任务状态
+            <select name="status">
+                <option value="">全部状态</option>
+                {% for status in statuses %}<option value="{{ status }}" {% if filters.status == status %}selected{% endif %}>{{ status }}</option>{% endfor %}
+            </select>
+        </label>
+        <label>优先级
+            <select name="priority">
+                <option value="">全部优先级</option>
+                {% for priority in priorities %}<option value="{{ priority }}" {% if filters.priority == priority %}selected{% endif %}>{{ priority }}</option>{% endfor %}
+            </select>
+        </label>
+        <button class="button button-dark" type="submit">应用筛选</button>
+    </form>
+</section>
+
+<section class="panel task-panel">
+    <div class="section-heading"><div><p class="eyebrow">TASK LIST</p><h2>任务清单</h2></div><span class="result-count">当前显示 {{ tasks|length }} 项</span></div>
+    {% if tasks %}
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>任务</th><th>课程</th><th>截止日期</th><th>优先级</th><th>状态</th><th>提醒</th><th class="actions-column">操作</th></tr></thead>
+            <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td><a class="task-name" href="{{ url_for('tasks.detail', task_id=task.id) }}">{{ task.name }}</a></td>
+                    <td>{{ task.course }}</td>
+                    <td class="date-cell">{{ task.due_date }}</td>
+                    <td><span class="badge priority-{{ task.priority_class }}">{{ task.priority }}优先级</span></td>
+                    <td><span class="badge status-{{ task.status_class }}">{{ task.status }}</span></td>
+                    <td>{% if task.reminder %}<span class="badge reminder-{{ task.reminder }}">{{ task.reminder_label }}</span>{% else %}<span class="muted">—</span>{% endif %}</td>
+                    <td class="row-actions"><a href="{{ url_for('tasks.detail', task_id=task.id) }}">详情</a><a href="{{ url_for('tasks.edit', task_id=task.id) }}">编辑</a><a class="danger-link" href="{{ url_for('tasks.delete', task_id=task.id) }}">删除</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <span class="empty-icon" aria-hidden="true">✓</span>
+        <h3>{% if filters.course or filters.status or filters.priority %}没有符合条件的任务{% else %}还没有学习任务{% endif %}</h3>
+        <p>{% if filters.course or filters.status or filters.priority %}可以尝试调整或重置筛选条件。{% else %}创建第一项任务，开始安排今天的学习。{% endif %}</p>
+        {% if not (filters.course or filters.status or filters.priority) %}<a class="button button-primary" href="{{ url_for('tasks.create') }}">新建第一项任务</a>{% endif %}
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

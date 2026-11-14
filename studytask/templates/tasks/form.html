@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}{{ '新建任务' if mode == 'create' else '编辑任务' }}{% endblock %}
+{% block content %}
+<nav class="breadcrumb" aria-label="面包屑"><a href="{{ url_for('tasks.index') }}">任务总览</a><span>/</span><span>{{ '新建任务' if mode == 'create' else '编辑任务' }}</span></nav>
+<section class="panel form-panel">
+    <div class="form-heading"><p class="eyebrow">{{ 'NEW TASK' if mode == 'create' else 'EDIT TASK' }}</p><h1>{{ '记录一项新任务' if mode == 'create' else '修改任务信息' }}</h1><p>带 <span class="required">*</span> 的项目为必填项，内容将保存在本地数据库中。</p></div>
+    {% if errors %}<div class="error-summary" role="alert"><strong>请检查以下内容：</strong><ul>{% for message in errors.values() %}<li>{{ message }}</li>{% endfor %}</ul></div>{% endif %}
+    <form class="task-form" method="post">
+        <div class="field field-full"><label for="name">任务名称 <span class="required">*</span></label><input id="name" name="name" type="text" value="{{ task.name }}" maxlength="100" required placeholder="例如：完成数据结构实验报告"><small>1—100字</small></div>
+        <div class="field"><label for="course">所属课程 <span class="required">*</span></label><input id="course" name="course" type="text" value="{{ task.course }}" maxlength="60" required placeholder="例如：数据结构"><small>1—60字</small></div>
+        <div class="field"><label for="due_date">截止日期 <span class="required">*</span></label><input id="due_date" name="due_date" type="date" value="{{ task.due_date }}" required><small>格式：YYYY-MM-DD</small></div>
+        <div class="field"><label for="priority">优先级 <span class="required">*</span></label><select id="priority" name="priority" required>{% for priority in ('高', '中', '低') %}<option value="{{ priority }}" {% if task.priority == priority %}selected{% endif %}>{{ priority }}</option>{% endfor %}</select></div>
+        <div class="field"><label for="status">任务状态 <span class="required">*</span></label><select id="status" name="status" required>{% for status in ('待完成', '进行中', '已完成') %}<option value="{{ status }}" {% if task.status == status %}selected{% endif %}>{{ status }}</option>{% endfor %}</select></div>
+        <div class="field field-full"><label for="description">任务描述</label><textarea id="description" name="description" rows="6" maxlength="1000" placeholder="补充任务要求、完成步骤或注意事项">{{ task.description }}</textarea><small>可选，不超过1000字</small></div>
+        <div class="form-actions field-full"><button class="button button-primary" type="submit">{{ '创建任务' if mode == 'create' else '保存修改' }}</button><a class="button button-secondary" href="{{ url_for('tasks.detail', task_id=task.id) if mode == 'edit' else url_for('tasks.index') }}">取消</a></div>
+    </form>
+</section>
+{% endblock %}

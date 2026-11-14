@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}确认删除任务{% endblock %}
+{% block content %}
+<section class="panel confirm-panel">
+    <span class="warning-icon" aria-hidden="true">!</span>
+    <p class="eyebrow">DELETE TASK</p>
+    <h1>确认删除这项任务？</h1>
+    <p>你即将删除任务 <strong>“{{ task.name }}”</strong>。删除后数据将无法恢复，请确认是否继续。</p>
+    <dl class="confirm-details"><div><dt>所属课程</dt><dd>{{ task.course }}</dd></div><div><dt>截止日期</dt><dd>{{ task.due_date }}</dd></div></dl>
+    <form method="post" class="confirm-actions">
+        <button class="button button-danger" type="submit" name="action" value="confirm">确认删除</button>
+        <button class="button button-secondary" type="submit" name="action" value="cancel">取消，保留任务</button>
+    </form>
+</section>
+{% endblock %}
