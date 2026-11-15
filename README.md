@@ -78,4 +78,8 @@ StudyTask/
 
 ## 发布说明
 
-当前交付为本地可运行版本，尚未推送远程仓库或部署公网。代码仓库地址和公网 Web 地址需在获得真实账号与平台授权后补充，本项目不填写虚假地址。
+- GitHub 仓库：<https://github.com/lilinfeng666/StudyTask>
+- 公网地址：<https://studytask-lilinfeng.thevibehosting.com>
+- 托管平台：The Vibe Hosting，使用 Gunicorn 单 worker 和持久 SQLite 数据库。
+- 默认采用空闲休眠模式，访问时自动唤醒；未开启付费保活。
+- 2026-11-15 已验证公网新增任务，以及服务器休眠再唤醒后的任务和统计数据保留。
